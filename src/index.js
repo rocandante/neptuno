@@ -5,38 +5,24 @@ const dotenv = require('dotenv')
 const app = express()
 dotenv.config()
 
-// Configuraciones
-app.set('port', process.env.PORT)
-
 // Middlewares
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 // Rutas
-const userRoute = require('./routes/user')
+// const userRoute = require('./users/users.controller')
 const loginRoute = require('./routes/auth')
 
-app.use('/api/user', userRoute)
+// app.use('/api/user', userRoute)
 app.use('/api', loginRoute)
 
+// api routes
+app.use('/api/user', require('./users/user.controller'))
 
-// Base de datos
-mongoose.connect(
-    process.env.DB_HOST, 
-    {
-    useCreateIndex: true,
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
 
-const db = mongoose.connection
+//Servidor
+app.set('port', process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : 4000)
 
-db.on('error', console.error.bind(console, 'Error al conectar con MongoDB:'))
-db.once('open', function() {
-    console.log('Base de datos conectada')
-
-    //Servidor
-    app.listen(app.get('port'), function() {
-        console.log('Servidor en puerto: ' + app.get('port'))
-    })
+app.listen(app.get('port'), function() {
+    console.log('Servidor en puerto: ' + app.get('port'))
 })

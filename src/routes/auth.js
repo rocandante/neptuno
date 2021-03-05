@@ -1,7 +1,7 @@
 'use strict'
 
 const router = require('express').Router()
-const User = require('../models/users')
+const User = require('../users/user.model')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const pkg = require('../../package.json')
