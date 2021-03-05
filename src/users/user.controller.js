@@ -1,8 +1,8 @@
 const router = require('express').Router()
 const db = require('../_helpers/db')
-const bcrypt = require('bcryptjs')
 const verify = require('../_middleware/verifyToken')
 const handleError = require('../_middleware/error-handler')
+const userService = require('./user.service')
 
 // Rutas
 // router.all('*', verify)
@@ -19,8 +19,8 @@ async function getAll(req, res) {
         let docs = await db.User.find()
 
         if (!docs) throw 'No se encontraron documentos en la colección User'
-
-        res.status(200).json(docs)
+       
+        res.status(200).json(docs.map( x => userService.basicInfo(x) ))
     } catch (err) {
         handleError(err, req, res)
     }
@@ -32,7 +32,7 @@ async function getById(req, res) {
         if (!db.isValidId(req.params.id)) throw 'El ID ingresado no es válido'
 
         let docs = await db.User.findById(req.params.id)
-        res.status(200).json(docs)
+        res.status(200).json(userService.basicInfo(docs))
     } catch (err) {
         handleError(err, req, res)
     }
@@ -44,7 +44,7 @@ async function getByEmail(req, res) {
 
         if (!docs) throw 'No se encontró el email: ' + req.params.email
 
-        res.status(200).json(docs)
+        res.status(200).json(userService.basicInfo(docs))
     } catch (err) {
         handleError(err, req, res)
     }
@@ -58,8 +58,7 @@ async function create(req, res) {
         }
 
         // Encriptar el password
-        const salt = await bcrypt.genSalt(10)
-        const hashPass = await bcrypt.hash(req.body.password, salt)
+        const hashPass = await userService.hash(req.body.password)
         
         let user = new db.User({
             username: req.body.username,
@@ -70,9 +69,7 @@ async function create(req, res) {
         })
     
         await user.save()
-        res.status(201).json({
-            message: "Nuevo usuario agregado"
-        })
+        res.status(201).json(userService.basicInfo(user))
     } catch (err) {
         handleError(err, req, res)
     }
@@ -96,7 +93,7 @@ async function update(req, res) {
         Object.assign(docs, req.body)
         await docs.save()
 
-        res.status(201).json(docs)
+        res.status(201).json(userService.basicInfo(docs))
     } catch (err) {
         handleError(err, req, res)
     }
