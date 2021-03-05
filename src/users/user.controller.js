@@ -5,22 +5,24 @@ const verify = require('../_middleware/verifyToken')
 const handleError = require('../_middleware/error-handler')
 
 // Rutas
+// router.all('*', verify)
 router.get('/', getAll)
 router.get('/:id', getById)
 router.get('/email/:email', getByEmail)
 router.post('/', create)
+router.put('/:id', update)
 
 module.exports = router
 
 async function getAll(req, res) {
     try {
         let docs = await db.User.find()
+
+        if (!docs) throw 'No se encontraron documentos en la colección User'
+
         res.status(200).json(docs)
     } catch (err) {
-        res.status(400).json({
-            message: 'Error al devolver la lista de usuarios o no existe ningún usuario',
-            error: err
-        })
+        handleError(err, req, res)
     }
 }
 
@@ -40,14 +42,10 @@ async function getByEmail(req, res) {
     try {
         let docs = await db.User.findOne({ email: req.params.email })
 
-        if (!docs) throw 'No se encontró el email: ' +req.params.email
-        
+        if (!docs) throw 'No se encontró el email: ' + req.params.email
+
         res.status(200).json(docs)
     } catch (err) {
-        // res.status(400).json({
-        //     message: 'Error buscando usuario por email',
-        //     errors: err
-        // })
         handleError(err, req, res)
     }
 }
@@ -80,42 +78,26 @@ async function create(req, res) {
     }
 }
 
-// router.all('*', verify)
+async function update(req, res) {
+    try {
+        // valida el ID
+        if (!db.isValidId(req.params.id)) throw 'El ID ingresado no es válido'
 
-// router.post('/', async function(req, res) {
+        let docs = await db.User.findById(req.params.id)
 
-//     // Encriptar el password
-//     const salt = await bcrypt.genSalt(10)
-//     const hashPass = await bcrypt.hash(req.body.password, salt)
-    
-//     let user = new User({
-//         username: req.body.username,
-//         name: req.body.name,
-//         email: req.body.email,
-//         password: hashPass,
-//         rol: req.body.rol
-//     })
+        if (!docs) throw 'No se encontró un documento con el ID ' + req.params.id
 
-//     try {
-//         const result = await user.save()
-//         res.status(201).json({
-//             message: "Nuevo usuario agregado"
-//         })
-//     } catch (err) {
-//         res.status(400).json(err.message)
-//     }
-// })
+        // valida si el email cambió
+        if (req.body.email && docs.email !== req.body.email && await db.User.findOne({ email: req.body.email})) {
+            throw 'Email "' + req.body.email + '" ya existe';
+        }
 
-// router.put('/:id', async function (req, res) {
+        // copia los parametros de la petición al documento y los guarda
+        Object.assign(docs, req.body)
+        await docs.save()
 
-//     try {
-//         await User.findByIdAndUpdate(req.params.id, req.body).exec()
-//         res.status(201).json({
-//             message: "Usuario actualizado"
-//         })
-//     } catch (err) {
-//         res.status(400).json(err.message)
-//     }
-// })
-
-// module.exports = router
+        res.status(201).json(docs)
+    } catch (err) {
+        handleError(err, req, res)
+    }
+}
