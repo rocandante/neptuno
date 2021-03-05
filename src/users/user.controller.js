@@ -1,15 +1,14 @@
 const router = require('express').Router()
 const db = require('../_helpers/db')
-const verify = require('../_middleware/verifyToken')
+const autho = require('../_middleware/authorize')
 const handleError = require('../_middleware/error-handler')
 const userService = require('./user.service')
 
 // Rutas
-// router.all('*', verify)
-router.get('/', getAll)
-router.get('/:id', getById)
-router.get('/email/:email', getByEmail)
-router.post('/', create)
+router.get('/', autho(), getAll)
+router.get('/:id', autho(), getById)
+router.get('/email/:email',autho(), getByEmail)
+router.post('/', autho(["admin"]), create)
 router.post('/login', authenticate)
 router.put('/:id', update)
 
@@ -66,7 +65,7 @@ async function create(req, res) {
             name: req.body.name,
             email: req.body.email,
             password: hashPass,
-            rol: req.body.rol
+            role: req.body.role
         })
     
         await user.save()

@@ -25,9 +25,9 @@ const userSchema = new mongoose.Schema({
         minlength: 6,
         trim: true
     },    
-    rol: { 
+    role: { 
         type: String, 
-        enum: [ "lector", "editor", "admin" ], 
+        enum: [ "user", "autor", "admin" ], 
         required: true 
     },
     isActive: { 

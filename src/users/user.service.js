@@ -13,8 +13,8 @@ module.exports = {
 }
 
 function basicInfo(user) {
-    const { id, username, name, email, rol, isActive, createdOn } = user
-    return { id, username, name, email, rol, isActive, createdOn }
+    const { id, username, name, email, role, isActive, createdOn } = user
+    return { id, username, name, email, role, isActive, createdOn }
 }
 
 
@@ -29,16 +29,8 @@ function validPass( req_pass, user_pass ) {
 function generateToken ( user ) {
     const token = jwt.sign({ 
         sub: user._id,
-        role: user.rol,
         exp: moment().add(8, 'hours').unix() // Expira en 8 horas
     }, process.env.APP_KEY)
 
     return token
 }
-
-/*
-function generateJwtToken(account) {
-    // create a jwt token containing the account id that expires in 15 minutes
-    return jwt.sign({ sub: account.id, id: account.id }, config.secret, { expiresIn: '15m' });
-}
-*/
