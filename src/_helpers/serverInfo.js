@@ -1,11 +1,7 @@
 'use strict'
 
 const router = require('express').Router()
-const User = require('../users/user.model')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
 const pkg = require('../../package.json')
-const moment = require('moment')
 
 
 /**
@@ -23,10 +19,6 @@ router.get('/', (req, res) => {
     }
 
     return res.status(200).json(info)
-})
-
-router.post('logout', async function (req, res) {
-    // TODO: hacer la función de logout de la API como borrar token de sesión
 })
 
 module.exports = router

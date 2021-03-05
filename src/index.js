@@ -10,13 +10,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 // Rutas
-// const userRoute = require('./users/users.controller')
-const loginRoute = require('./routes/auth')
-
-// app.use('/api/user', userRoute)
-app.use('/api', loginRoute)
-
-// api routes
+app.use('/api', require('./_helpers/serverInfo'))
 app.use('/api/user', require('./users/user.controller'))
 
 
