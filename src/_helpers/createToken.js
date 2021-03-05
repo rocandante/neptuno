@@ -2,10 +2,11 @@ const crypto = require('crypto')
 const fs = require('fs')
 
 /**
- * Función que genera un token de 64 bytes aleatorio
+ * Genera un token de 64 bytes aleatorio
  * y lo guarda en el archivo de entorno .env 
- * bajo la variable TOKEN_SECRET para ser usado
- * como llave de encriptación.
+ * bajo la variable APP_KEY para ser usado
+ * como llave de encriptación. Debe generarse
+ * una vez para no duplicar el valor de APP_KEY
  * @author Juan Cardona
  * @param {*} err 
  * @param {*} buf 
@@ -15,7 +16,7 @@ crypto.randomBytes(64, function (err, buf) {
     if (err) throw err
 
     // Abre el archivo .env y guarda el token al final del archivo
-    fs.appendFile('.env', `TOKEN_SECRET = '${buf.toString('hex')}'`, function (err) { 
+    fs.appendFile('.env', `APP_KEY = '${buf.toString('hex')}'`, function (err) { 
         if (err)
             console.log(err)
         else

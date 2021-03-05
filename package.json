@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "token": "node src/createToken.js"
+    "token": "node src/_helpers/createToken.js"
   },
   "keywords": [],
   "author": "",
