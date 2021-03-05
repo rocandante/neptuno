@@ -10,6 +10,7 @@ router.get('/', getAll)
 router.get('/:id', getById)
 router.get('/email/:email', getByEmail)
 router.post('/', create)
+router.post('/login', authenticate)
 router.put('/:id', update)
 
 module.exports = router
@@ -72,6 +73,39 @@ async function create(req, res) {
         res.status(201).json(userService.basicInfo(user))
     } catch (err) {
         handleError(err, req, res)
+    }
+}
+
+/**
+ * Realiza la operación de validación de credenciales
+ * de un usuario, Si son correctas generá un token
+ * para su identificación durante la sesión abierta,
+ * de lo contrario retorna el código 400 con su
+ * respectivo error
+ * @param {*} req 
+ * @param {*} res 
+ */
+async function authenticate (req, res) {
+    try {
+        let user = await db.User.findOne({ username: req.body.username})
+
+        if (!user) throw 'Usuario o contraseña incorrectos'
+
+        // Validar si usario activo
+        if (!user.isActive) throw 'Usuario no activo'
+
+        // Validar password
+        const validPass = await userService.validPass(req.body.password, user.password)
+
+        if(!validPass) throw 'Usuario o contraseña incorrectos'
+
+        // Genera token
+        const token = await userService.generateToken( user )
+
+        res.status(200).header('auth-token', token).send(token)
+
+    } catch (err) {
+        handleError(err, req, res) 
     }
 }
 

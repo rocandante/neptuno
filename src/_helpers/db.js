@@ -25,7 +25,6 @@ try {
 
 module.exports = {
     User: require('../users/user.model'),
-    // RefreshToken: require('accounts/refresh-token.model'),
     isValidId
 }
 
