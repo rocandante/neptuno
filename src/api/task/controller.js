@@ -5,11 +5,12 @@ module.exports = {
   getAll,
   getOne,
   update,
-  _delete
+  deleteOne
 }
 
 function create (req, res, next) {
-  res.json({})
+  const { body = {} } = req
+  res.json(body)
 }
 
 function getAll (req, res, next) {
@@ -17,13 +18,29 @@ function getAll (req, res, next) {
 }
 
 function getOne (req, res, next) {
-  res.json({})
+  const { params = {} } = req
+  const { id } = params
+
+  res.json({
+    id
+  })
 }
 
 function update (req, res, next) {
-  res.json({})
+  const { body = {}, params = {} } = req
+  const { id } = params
+
+  res.json({
+    id,
+    body
+  })
 }
 
-function _delete (req, res, next) {
-  res.json({})
+function deleteOne (req, res, next) {
+  const { params = {} } = req
+  const { id } = params
+
+  res.json({
+    id
+  })
 }
