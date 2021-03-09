@@ -3,13 +3,14 @@ require('winston-daily-rotate-file')
 
 const options = {
   file: {
+    frequency: '24h',
     level: 'info',
     dirname: './/logs//',
     filename: 'app-%DATE%.log',
     datePattern: 'YYYY-MM-DD-HH',
     zippedArchive: true,
     maxSize: '20m',
-    maxFiles: '14d'
+    maxFiles: '90d'
   },
   console: {
     level: 'debug',
