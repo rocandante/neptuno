@@ -2,12 +2,16 @@ const express = require('express')
 const { level } = require('./logger')
 const requestId = require('express-request-id')()
 const logger = require('./logger')
+const api = require('../api')
 
 const app = express()
 
 // Setup middleware
 app.use(requestId)
 app.use(logger.requests)
+
+// Setup router and routes
+app.use('/api', api)
 
 app.get('/', (req, res, next) => {
   res.send('Bienvenido a la API REST')
