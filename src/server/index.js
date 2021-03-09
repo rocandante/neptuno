@@ -10,6 +10,12 @@ const app = express()
 app.use(requestId)
 app.use(logger.requests)
 
+// parse application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: false }))
+// parse application/json
+app.use(express.json())
+
+
 // Setup router and routes
 app.use('/api', api)
 
