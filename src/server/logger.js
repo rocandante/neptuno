@@ -1,6 +1,10 @@
 const { createLogger, format, transports } = require('winston')
 require('winston-daily-rotate-file')
+const morgan = require('morgan')
+const stripFinalNewline = require('strip-final-newline')
+const { request } = require('express')
 
+// Opciones para Winston
 const options = {
   file: {
     frequency: '24h',
@@ -20,6 +24,7 @@ const options = {
   },
 }
 
+// Nes daily file
 const transport = new (transports.DailyRotateFile)(options.file)
 
 // Setup logger
@@ -31,5 +36,23 @@ const logger = createLogger({
     new transports.Console(options.console)
   ]
 })
+
+// Setup requests logger
+morgan.token('id', req => req.id)
+
+const requestFormat = ':remote-addr [:date[iso]] :id ":method :url" :status'
+
+const requests = morgan(requestFormat, {
+  stream: {
+    write: (message) => {
+      // Remove all line breaks
+      const log = stripFinalNewline(message)
+      return logger.info(log)
+    }
+  }
+})
+
+// Attach to logger object
+logger.requests = requests
 
 module.exports = logger

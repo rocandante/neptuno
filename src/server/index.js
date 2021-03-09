@@ -1,15 +1,18 @@
 const express = require('express')
 const morgan = require('morgan')
 const { stream } = require('./logger')
+const requestId = require('express-request-id')()
 
 const logger = require('./logger')
 
 const app = express()
 
 // Setup middleware
-app.use(
-  morgan('combined', { stream: { write: (message) => logger.info(message) } })
-)
+app.use(requestId)
+app.use(logger.requests)
+// app.use(
+//   morgan('combined', { stream: { write: (message) => logger.info(message) } })
+// )
 
 app.get('/', (req, res, next) => {
   res.send('Bienvenido a la API REST')
