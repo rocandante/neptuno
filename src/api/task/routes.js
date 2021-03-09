@@ -18,7 +18,7 @@ router
   .route('/:id')
   .get(controller.getOne)
   .put(controller.update)
-  .delete(controller.delete)
+  .delete(controller._delete)
  
 
 module.exports = router

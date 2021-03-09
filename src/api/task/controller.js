@@ -5,7 +5,7 @@ module.exports = {
   getAll,
   getOne,
   update,
-  delete
+  _delete
 }
 
 function create (req, res, next) {
@@ -24,6 +24,6 @@ function update (req, res, next) {
   res.json({})
 }
 
-function delete (req, res, next) {
+function _delete (req, res, next) {
   res.json({})
 }
