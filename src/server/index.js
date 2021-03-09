@@ -23,8 +23,8 @@ app.use( (req, res, next) => {
 })
 
 // Error handler
-app.use( (req, res, next) => {
-  const { statusCode = 500, message } = err
+app.use( (err, req, res, next) => {
+  const { statusCode = 500, message, level = 'error' } = err
   const log = `${logger.header(req)} ${statusCode} ${message}`
 
   logger[level](log)

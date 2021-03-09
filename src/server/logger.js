@@ -40,7 +40,7 @@ const logger = createLogger({
 // Setup requests logger
 morgan.token('id', req => req.id)
 
-const requestFormat = ':remote-addr [:date[iso]] :id ":method :url" :status'
+const requestFormat = ':remote-addr [:date[iso]] :id ":method :url HTTP/:http-version" :status | :remote-user ":user-agent" ":referrer"'
 
 const requests = morgan(requestFormat, {
   stream: {
