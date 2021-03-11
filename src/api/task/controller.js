@@ -1,4 +1,4 @@
-
+const Model = require('./model')
 
 module.exports = {
   create,
@@ -8,13 +8,29 @@ module.exports = {
   deleteOne
 }
 
-function create (req, res, next) {
+async function create (req, res, next) {
   const { body = {} } = req
-  res.json(body)
+  const document = new Model(body)
+
+  try {
+    const doc = await document.save()
+    res.status(201)
+    res.json(doc)
+  } catch (err) {
+    next( new Error(err) )
+  }
+  
 }
 
-function getAll (req, res, next) {
-  res.json({})
+async function getAll (req, res, next) {
+  try {
+    const docs = await Model.find({}).exec()
+    res.status(200)
+    res.json(docs)
+  } catch (err) {
+    next( new Error(err))
+  }
+  
 }
 
 function getOne (req, res, next) {
