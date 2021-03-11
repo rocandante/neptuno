@@ -5,7 +5,8 @@ module.exports = {
   getAll,
   getOne,
   update,
-  deleteOne
+  deleteOne,
+  id
 }
 
 async function create (req, res, next) {
@@ -33,30 +34,60 @@ async function getAll (req, res, next) {
   
 }
 
-function getOne (req, res, next) {
-  const { params = {} } = req
-  const { id } = params
+async function getOne (req, res, next) {
+  const { doc = {} } = req
+  
+  res.json(doc)
 
-  res.json({
-    id
-  })
 }
 
-function update (req, res, next) {
-  const { body = {}, params = {} } = req
-  const { id } = params
+async function update (req, res, next) {
+  const { doc = {}, body = {} } = req
+  
+  Object.assign(doc, body)
 
-  res.json({
-    id,
-    body
-  })
+  try {
+    const updated = await doc.save()
+
+    res.status(201)
+    res.json(updated)
+  } catch (err) {
+    next( new Error(err))
+  }
 }
 
-function deleteOne (req, res, next) {
-  const { params = {} } = req
-  const { id } = params
+async function deleteOne (req, res, next) {
+  const { doc = {} } = req
 
-  res.json({
-    id
-  })
+  try {
+    const removed = await doc.remove()
+    res.status(201)
+    res.json(removed)
+  } catch (err) {
+    next( new Error(err))
+  }
+
+}
+
+async function id (req, res, next, id) {
+
+  try {
+    const doc = await Model.findById(id)
+
+    if (!doc) {
+      const message = `${Model.modelName} not found`
+
+      return next({
+        message,
+        statusCode: 404,
+        level: 'warn'
+      })
+    }
+
+    req.doc = doc
+    next()
+    
+  } catch (err) {
+    next( new Error(err))
+  }
 }

@@ -14,6 +14,8 @@ router
   .post(controller.create)
   .get(controller.getAll)
 
+router.param('id', controller.id)
+
 router
   .route('/:id')
   .get(controller.getOne)
