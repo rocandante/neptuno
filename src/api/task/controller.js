@@ -16,7 +16,10 @@ async function create (req, res, next) {
   try {
     const doc = await document.save()
     res.status(201)
-    res.json(doc)
+    res.json({
+      success: true,
+      data: doc
+    })
   } catch (err) {
     next( new Error(err) )
   }
@@ -27,7 +30,10 @@ async function getAll (req, res, next) {
   try {
     const docs = await Model.find({}).exec()
     res.status(200)
-    res.json(docs)
+    res.json({
+      success: true,
+      data: docs
+    })
   } catch (err) {
     next( new Error(err))
   }
@@ -37,7 +43,10 @@ async function getAll (req, res, next) {
 async function getOne (req, res, next) {
   const { doc = {} } = req
   
-  res.json(doc)
+  res.json({
+    success: true,
+    data: doc
+  })
 
 }
 
@@ -50,7 +59,10 @@ async function update (req, res, next) {
     const updated = await doc.save()
 
     res.status(201)
-    res.json(updated)
+    res.json({
+      success: true,
+      data: updated
+    })
   } catch (err) {
     next( new Error(err))
   }
@@ -62,7 +74,10 @@ async function deleteOne (req, res, next) {
   try {
     const removed = await doc.remove()
     res.status(201)
-    res.json(removed)
+    res.json({
+      success: true,
+      data: removed
+    })
   } catch (err) {
     next( new Error(err))
   }
