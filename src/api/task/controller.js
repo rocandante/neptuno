@@ -1,4 +1,5 @@
 const Model = require('./model')
+const db = require('../../helper/db')
 
 module.exports = {
   create,
@@ -85,6 +86,12 @@ async function deleteOne (req, res, next) {
 }
 
 async function id (req, res, next, id) {
+
+  if (!db.isValidId(id)) return next({
+    message: `${id} is not a valid id type`,
+    statusCode: 400,
+    level: 'warn'
+  })
 
   try {
     const doc = await Model.findById(id)
