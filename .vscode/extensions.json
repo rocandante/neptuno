@@ -1,6 +1,5 @@
 {
      "recommendations": [
-     "waderyan.nodejs-extension-pack",
      "dbaeumer.vscode-eslint",
      "esbenp.prettier-vscode"
      ]
