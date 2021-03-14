@@ -1,6 +1,8 @@
 const Model = require('./model')
 const db = require('../../helper/db')
 
+const { paginationParseParams } = db
+
 module.exports = {
   create,
   getAll,
@@ -28,12 +30,29 @@ async function create (req, res, next) {
 }
 
 async function getAll (req, res, next) {
+  const { query = {} } = req
+  let { limit, page, skip } = paginationParseParams(query)
+
+  const all = Model.find({}).skip(skip).limit(limit)
+  const count = Model.countDocuments()
+
   try {
-    const docs = await Model.find({}).exec()
+    const data = await Promise.all([all.exec(), count.exec()])
+  
+    const [ docs, total ] = data
+    const pages = Math.ceil(total / limit)
+
     res.status(200)
     res.json({
       success: true,
-      data: docs
+      data: docs,
+      meta: {
+        limit,
+        skip,
+        total,
+        page,
+        pages
+      }
     })
   } catch (err) {
     next( new Error(err))

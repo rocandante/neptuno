@@ -9,6 +9,11 @@ const config = {
     url: process.env.DB_URL,
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD
+  },
+  pagination: {
+    limit: 10,
+    skip: 0,
+    page: 1
   }
 }
 
