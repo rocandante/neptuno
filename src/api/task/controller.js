@@ -12,6 +12,16 @@ module.exports = {
   id
 }
 
+/**
+ * Se encarga de devolver una lista de campos ordenada
+ * 
+ * @param {*} task - el objeto que contiene la tarea
+ */
+function basicInfo(task) {
+  const { id, title, description, url, dueDate, createdAt } = task
+  return { id, title, description, url, dueDate, createdAt }
+}
+
 async function create (req, res, next) {
   const { body = {} } = req
   const document = new Model(body)
@@ -21,7 +31,7 @@ async function create (req, res, next) {
     res.status(201)
     res.json({
       success: true,
-      data: doc
+      data: basicInfo(doc)
     })
   } catch (err) {
     next( new Error(err) )
@@ -45,7 +55,7 @@ async function getAll (req, res, next) {
     res.status(200)
     res.json({
       success: true,
-      data: docs,
+      data: docs.map( x => basicInfo(x) ),
       meta: {
         limit,
         skip,
@@ -81,7 +91,7 @@ async function update (req, res, next) {
     res.status(201)
     res.json({
       success: true,
-      data: updated
+      data: basicInfo(updated)
     })
   } catch (err) {
     next( new Error(err))
@@ -96,7 +106,7 @@ async function deleteOne (req, res, next) {
     res.status(201)
     res.json({
       success: true,
-      data: removed
+      data: basicInfo(removed) 
     })
   } catch (err) {
     next( new Error(err))
