@@ -33,7 +33,7 @@ async function getAll (req, res, next) {
   const { query = {} } = req
   let { limit, page, skip } = paginationParseParams(query)
 
-  const all = Model.find({}).skip(skip).limit(limit)
+  const all = Model.find({}).sort({'createdAt': 'desc'}).skip(skip).limit(limit)
   const count = Model.countDocuments()
 
   try {
