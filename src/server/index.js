@@ -1,5 +1,4 @@
 const express = require('express')
-const { level } = require('./logger')
 const requestId = require('express-request-id')()
 const errorHandler = require('../middleware/errorHandler')
 const logger = require('./logger')
