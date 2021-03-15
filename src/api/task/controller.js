@@ -75,7 +75,7 @@ async function getOne (req, res, next) {
   
   res.json({
     success: true,
-    data: doc
+    data: basicInfo(doc) 
   })
 
 }
