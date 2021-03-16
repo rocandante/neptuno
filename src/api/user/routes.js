@@ -2,17 +2,25 @@ const router = require('express').Router()
 const controller = require('./controller')
 
 /*
-* /api/tasks/ POST      - Create
-* /api/tasks/ GET       - Read all
-* /api/tasks/:id GET    - Read one
-* /api/tasks/:id PUT    - Update
-* /api/tasks/:id DELETE - Delete
+* /api/users/ POST      - Create
+* /api/users/ GET       - Read all
+* /api/users/:id GET    - Read one
+* /api/users/:id PUT    - Update
+* /api/users/:id DELETE - Delete
 */
 
 router
   .route('/')
   .post(controller.create)
   .get(controller.getAll)
+
+router
+  .route('/login')
+  .post(controller.login)
+
+router
+  .route('/signup')
+  .post(controller.create)
 
 router.param('id', controller.id)
 

@@ -134,6 +134,59 @@ async function id (req, res, next, id) {
   }
 }
 
+async function login (req, res, next) {
+  const { body = {} } = req
+  const { username = '', email = '', password = '' } = body
+
+  try {
+    const user = await Model.findOne({ email: email }).exec()
+
+    // valida que si exista el usuario
+    if (!user) {
+      const message = 'Email or password are invalid'
+
+      return next({
+        success: false,
+        message,
+        statusCode: 401,
+        level: 'info'
+      })
+    }
+
+    // valida si el usuario está activo
+    if (!user.isActive) {
+      const message = 'User is not active'
+
+      return next({
+        success: false,
+        message,
+        statusCode: 401,
+        level: 'info'
+      })
+    }
+
+    const verified = await user.verifyPassword(password)
+
+    if (!verified) {
+      const message = 'Email or password are invalid'
+
+      return next({
+        success: false,
+        message,
+        statusCode: 401,
+        level: 'info'
+      })
+    }
+
+    return res.json({
+      success: true,
+      data: basicInfo(user)
+    })
+  } catch (err) {
+    next( new Error(err))
+  }
+
+}
 
 module.exports = {
   create,
@@ -141,5 +194,6 @@ module.exports = {
   getOne,
   update,
   deleteOne,
-  id
+  id,
+  login
 }

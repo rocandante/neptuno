@@ -1,8 +1,9 @@
 const mongoose = require('mongoose')
+const { hash, compare } = require('bcryptjs')
 
 const { Schema } = mongoose
 
-const user = new Schema({
+const userSchema = new Schema({
   username: { 
     type: String, 
     unique: true, 
@@ -49,7 +50,7 @@ const user = new Schema({
   toObject: { virtuals: true }
 })
 
-user
+userSchema
   .virtual('name')
   .get( function getName() {
     return `${this.firstname} ${this.lastname}`
@@ -60,4 +61,16 @@ user
     this.lastname = lastname
   })
 
-module.exports = mongoose.model('user', user)
+userSchema.pre('save', async function save(next) {
+  if (this.isNew || this.isModified('password')) {
+    this.password = await hash(this.password, 10)
+  }
+
+  next()
+})
+
+userSchema.methods.verifyPassword = function verifyPassword(password) {
+  return compare(password, this.password)
+}
+
+module.exports = mongoose.model('user', userSchema)
