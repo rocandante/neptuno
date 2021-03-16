@@ -95,8 +95,28 @@ const role = (roles = []) => {
   
 }
 
+const me = (req, res, next) => {
+  const { decoded = {}, params = {} } = req
+  const { sub } = decoded
+  const { id } = params
+
+  if (sub !== id) {
+    const message = 'Forbidden'
+
+    return next({
+      success: false,
+      message,
+      statusCode: 403,
+      level: 'warn'
+    })
+  }
+
+  next()
+}
+
 module.exports = {
   signToken,
   auth,
-  role
+  role,
+  me
 }

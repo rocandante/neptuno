@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const controller = require('./controller')
-const { auth, role } = require('../../middleware/auth')
+const { auth, role, me } = require('../../middleware/auth')
 
 /*
 * /api/users/ POST      - Create
@@ -33,8 +33,8 @@ router
 
 router
   .route('/profile/:id')
-  .get(auth, role(['user', 'admin']), controller.getProfile)
-  .put(auth, role(['user', 'admin']), controller.updateProfile)
+  .get(auth, role(['user', 'admin']), me, controller.getProfile)
+  .put(auth, role(['user', 'admin']), me, controller.updateProfile)
  
 
 module.exports = router
