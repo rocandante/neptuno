@@ -3,15 +3,6 @@ const db = require('../../helper/db')
 
 const { paginationParseParams } = db
 
-module.exports = {
-  create,
-  getAll,
-  getOne,
-  update,
-  deleteOne,
-  id
-}
-
 /**
  * Se encarga de devolver una lista de campos ordenada
  * 
@@ -141,4 +132,14 @@ async function id (req, res, next, id) {
   } catch (err) {
     next( new Error(err))
   }
+}
+
+
+module.exports = {
+  create,
+  getAll,
+  getOne,
+  update,
+  deleteOne,
+  id
 }
