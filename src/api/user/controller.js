@@ -10,8 +10,8 @@ const { paginationParseParams } = db
  * @param {*} user - el objeto que contiene el usuario
  */
 function basicInfo(user) {
-  const { id, username, name, email, isActive, createdAt } = user
-  return { id, username, name, email, isActive, createdAt }
+  const { id, username, name, email, role, isActive, createdAt } = user
+  return { id, username, name, email, role, isActive, createdAt }
 }
 
 async function create (req, res, next) {

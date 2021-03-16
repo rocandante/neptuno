@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const controller = require('./controller')
-const { auth } = require('../../middleware/auth')
+const { auth, role } = require('../../middleware/auth')
 
 /*
 * /api/users/ POST      - Create
@@ -12,8 +12,8 @@ const { auth } = require('../../middleware/auth')
 
 router
   .route('/')
-  .post(auth, controller.create)
-  .get(auth, controller.getAll)
+  .post(auth, role(['admin']), controller.create)
+  .get(auth, role(['admin']), controller.getAll)
 
 router
   .route('/login')
@@ -27,9 +27,9 @@ router.param('id', controller.id)
 
 router
   .route('/:id')
-  .get(auth, controller.getOne)
-  .put(auth, controller.update)
-  .delete(auth, controller.deleteOne)
+  .get(auth, role(['user']), controller.getOne)
+  .put(auth, role(['user']), controller.update)
+  .delete(auth,role(['admin']), controller.deleteOne)
  
 
 module.exports = router
