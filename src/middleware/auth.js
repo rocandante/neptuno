@@ -53,7 +53,10 @@ const role = (roles = []) => {
   
   return [
     async (req, res, next) => {
-      if (!req.decoded) {
+      const { decoded = {} } = req
+      const { sub } = decoded
+
+      if (!decoded) {
         const message = 'Access denied'
     
         return next({
@@ -65,7 +68,7 @@ const role = (roles = []) => {
       }
       
       // valida si usuario existe
-      const user = await Model.findById(req.decoded.sub).exec()
+      const user = await Model.findById(sub).exec()
     
       if (!user) {
         const message = 'Access denied - user not found'
