@@ -137,10 +137,21 @@ async function id (req, res, next, id) {
 
 async function login (req, res, next) {
   const { body = {} } = req
-  const { username = '', email = '', password = '' } = body
+  const { login = '', password = '' } = body
 
+  // patrón para validar si el String contiene @ tipo email
+  const pattern = /.+\@.+\..+/
+  let result = {}
+
+  // se valida si se cumple el patrón
+  if (login.match(pattern)) {
+    result =  { email: login }
+  } else {
+    result =  { username: login }
+  }
+  
   try {
-    const user = await Model.findOne({ email: email }).exec()
+    const user = await Model.findOne(result).exec()
 
     // valida que si exista el usuario
     if (!user) {
