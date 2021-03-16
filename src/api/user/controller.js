@@ -1,5 +1,6 @@
 const Model = require('./model')
 const db = require('../../helper/db')
+const { signToken } = require('../../middleware/auth')
 
 const { paginationParseParams } = db
 
@@ -178,9 +179,15 @@ async function login (req, res, next) {
       })
     }
 
+    const { _id } = user
+    const token = signToken({ sub: _id })
+
     return res.json({
       success: true,
-      data: basicInfo(user)
+      data: basicInfo(user),
+      meta: {
+        token
+      }
     })
   } catch (err) {
     next( new Error(err))

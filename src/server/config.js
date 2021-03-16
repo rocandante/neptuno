@@ -14,6 +14,10 @@ const config = {
     limit: 10,
     skip: 0,
     page: 1
+  },
+  token: {
+    secret: process.env.TOKEN_SECRET,
+    expires: process.env.TOKEN_EXPIRES
   }
 }
 
