@@ -44,7 +44,20 @@ const user = new Schema({
       default: true 
   },
 }, {
-  timestamps: true
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
 })
+
+user
+  .virtual('name')
+  .get( function getName() {
+    return `${this.firstname} ${this.lastname}`
+  })
+  .set( function setName(name) {
+    const [firstname = '', lastname = ''] = name.split(' ')
+    this.firstname = firstname
+    this.lastname = lastname
+  })
 
 module.exports = mongoose.model('user', user)
