@@ -106,6 +106,45 @@ async function deleteOne (req, res, next) {
 
 }
 
+/**
+ * Devuelve los datos del usuario logueado
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+async function getProfile (req, res, next) {
+  const { doc = {} } = req
+  
+  res.json({
+    success: true,
+    data: basicInfo(doc) 
+  })
+}
+
+/**
+ * Actualiza el perfil del usuario logueado
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+async function updateProfile (req, res, next) {
+  const { doc = {}, body = {} } = req
+  
+  Object.assign(doc, body)
+
+  try {
+    const updated = await doc.save()
+
+    res.status(201)
+    res.json({
+      success: true,
+      data: basicInfo(updated)
+    })
+  } catch (err) {
+    next( new Error(err))
+  }
+}
+
 async function id (req, res, next, id) {
 
   if (!db.isValidId(id)) return next({
@@ -212,6 +251,8 @@ module.exports = {
   getOne,
   update,
   deleteOne,
+  getProfile,
+  updateProfile,
   id,
   login
 }

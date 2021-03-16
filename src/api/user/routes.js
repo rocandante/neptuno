@@ -21,15 +21,20 @@ router
 
 router
   .route('/signup')
-  .post(controller.create)
+  .post(controller.create)  
 
 router.param('id', controller.id)
 
 router
   .route('/:id')
-  .get(auth, role(['user']), controller.getOne)
-  .put(auth, role(['user']), controller.update)
+  .get(auth, role(['admin']), controller.getOne)
+  .put(auth, role(['admin']), controller.update)
   .delete(auth,role(['admin']), controller.deleteOne)
+
+router
+  .route('/profile/:id')
+  .get(auth, role(['user', 'admin']), controller.getProfile)
+  .put(auth, role(['user', 'admin']), controller.updateProfile)
  
 
 module.exports = router
