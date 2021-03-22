@@ -21,7 +21,7 @@ router
 
 router
   .route('/signup')
-  .post(controller.create)  
+  .post(controller.signup)  
 
 router.param('id', controller.id)
 

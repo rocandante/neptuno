@@ -245,6 +245,40 @@ async function login (req, res, next) {
 
 }
 
+/**
+ * Se encarga le registrar un usuario nuevo y generar el
+ * token para su autenticación
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+async function signup (req, res, next) {
+  const { body = {} } = req
+  const document = new Model(body)
+
+  // Rol por defecto para los nuevos usuarios
+  document.role = 'user'
+
+  try {
+    const doc = await document.save()
+
+    const { _id } = doc
+    const token = signToken({ sub: _id })
+
+    res.status(201)
+    res.json({
+      success: true,
+      data: basicInfo(doc),
+      meta: {
+        token
+      }
+    })
+  } catch (err) {
+    next( new Error(err) )
+  }
+  
+}
+
 module.exports = {
   create,
   getAll,
@@ -254,5 +288,6 @@ module.exports = {
   getProfile,
   updateProfile,
   id,
-  login
+  login,
+  signup
 }
