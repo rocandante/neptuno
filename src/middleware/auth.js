@@ -4,12 +4,25 @@ const Model = require('../api/user/model')
 
 const { secret, expires } = config.token
 
+/**
+ * Genera un Token usando jsonwebtoken
+ * @param {*} payload - datos que serán incluidos en el token
+ * @param {*} expiresIn - vigencia del token
+ * @returns 
+ */
 const signToken = (payload, expiresIn = expires) =>
   sign(payload, secret, {
     algorithm: 'HS256',
     expiresIn
   })
 
+/**
+ * Verifica que la petición a un endpoint contenga un token válido
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 const auth = (req, res, next) => {
   let token = req.headers.authorization || req.query.token || ''
 
@@ -45,6 +58,12 @@ const auth = (req, res, next) => {
   })
 }
 
+/**
+ * Restringe el acceso a los endpoints según el rol
+ * asignado al usuario
+ * @param {*} roles - rol o conjunto de roles que posee el usuario
+ * @returns 
+ */
 const role = (roles = []) => {
 
   if (typeof roles === 'string') {
@@ -98,6 +117,14 @@ const role = (roles = []) => {
   
 }
 
+/**
+ * Restringe que las acciones PUT o DELETE sólo se realicen
+ * sobre los documentos pertenecientes al mismo usuario.
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 const me = (req, res, next) => {
   const { decoded = {}, params = {} } = req
   const { sub } = decoded
