@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const controller = require('./controller')
 const { auth, role, me } = require('../../middleware/auth')
+const taskRouter = require('../task/routes')
 
 /*
 * /api/users/ POST      - Create
@@ -35,6 +36,9 @@ router
   .route('/profile/:id')
   .get(auth, role(['user', 'admin']), me, controller.getProfile)
   .put(auth, role(['user', 'admin']), me, controller.updateProfile)
+
+
+router.use('/:userId/tasks', taskRouter)
  
 
 module.exports = router

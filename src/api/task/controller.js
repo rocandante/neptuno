@@ -1,5 +1,6 @@
 const Model = require('./model')
 const db = require('../../helper/db')
+const User = require('../user/model')
 
 const { paginationParseParams } = db
 
@@ -9,12 +10,45 @@ const { paginationParseParams } = db
  * @param {*} task - el objeto que contiene la tarea
  */
 function basicInfo(task) {
-  const { id, title, description, url, dueDate, createdAt } = task
-  return { id, title, description, url, dueDate, createdAt }
+  const { id, title, description, url, dueDate, userId, createdAt } = task
+  return { id, title, description, url, dueDate, userId, createdAt }
 }
 
+
+async function parentId(req, res, next){
+  const { params = {} } = req
+  const { userId = null } = params
+
+  if (!userId) {
+    return next()
+  }
+
+  try {
+    const doc = await User.findById(userId).exec()
+
+    if (!doc){
+      const message = 'User not found'
+
+      return next({
+        success: false,
+        message,
+        statusCode: 404,
+        level: 'warn'
+      })
+    }
+
+    next()
+  } catch(err) {
+    next(new Error(err))
+  }
+}
+
+
 async function create (req, res, next) {
-  const { body = {} } = req
+  const { body = {}, params = {} } = req
+
+  Object.assign(body, params)
+
   const document = new Model(body)
 
   try {
@@ -31,15 +65,21 @@ async function create (req, res, next) {
 }
 
 async function getAll (req, res, next) {
-  const { query = {} } = req
+  const { query = {}, params = {} } = req
+  const { userId = null } = params
   let { limit, page, skip } = paginationParseParams(query)
+  let sql = {}
 
-  const all = Model.find({})
+  if (userId) {
+    sql = { userId: userId }
+  }
+  
+  const all = Model.find(sql)
     .sort({'createdAt': 'desc'})
     .skip(skip)
     .limit(limit)
-    .populate('userId')
-    
+    .populate('userId', 'firstname lastname')
+
   const count = Model.countDocuments()
 
   try {
@@ -77,9 +117,9 @@ async function getOne (req, res, next) {
 }
 
 async function update (req, res, next) {
-  const { doc = {}, body = {} } = req
+  const { doc = {}, body = {}, params = {} } = req
   
-  Object.assign(doc, body)
+  Object.assign(doc, body, params)
 
   try {
     const updated = await doc.save()
@@ -146,5 +186,6 @@ module.exports = {
   getOne,
   update,
   deleteOne,
-  id
+  id,
+  parentId
 }

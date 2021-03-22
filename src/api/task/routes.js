@@ -1,4 +1,6 @@
-const router = require('express').Router()
+const router = require('express').Router({
+  mergeParams: true
+})
 const controller = require('./controller')
 
 /*
@@ -11,16 +13,16 @@ const controller = require('./controller')
 
 router
   .route('/')
-  .post(controller.create)
-  .get(controller.getAll)
+  .post(controller.parentId, controller.create)
+  .get(controller.parentId, controller.getAll)
 
 router.param('id', controller.id)
 
 router
   .route('/:id')
-  .get(controller.getOne)
-  .put(controller.update)
-  .delete(controller.deleteOne)
+  .get(controller.parentId, controller.getOne)
+  .put(controller.parentId, controller.update)
+  .delete(controller.parentId, controller.deleteOne)
  
 
 module.exports = router
