@@ -34,7 +34,12 @@ async function getAll (req, res, next) {
   const { query = {} } = req
   let { limit, page, skip } = paginationParseParams(query)
 
-  const all = Model.find({}).sort({'createdAt': 'desc'}).skip(skip).limit(limit)
+  const all = Model.find({})
+    .sort({'createdAt': 'desc'})
+    .skip(skip)
+    .limit(limit)
+    .populate('userId')
+    
   const count = Model.countDocuments()
 
   try {
@@ -114,7 +119,7 @@ async function id (req, res, next, id) {
   })
 
   try {
-    const doc = await Model.findById(id)
+    const doc = await Model.findById(id).populate('userId').exec()
 
     if (!doc) {
       const message = `${Model.modelName} not found`

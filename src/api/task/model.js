@@ -28,6 +28,11 @@ const task = new Schema({
     type: Date,
     default: null
   },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+    require: true
+  }
 }, {
   timestamps: true
 })
