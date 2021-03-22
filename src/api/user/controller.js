@@ -145,6 +145,15 @@ async function updateProfile (req, res, next) {
   }
 }
 
+/**
+ * Verifica que el id enviado al endpoint sea válido
+ * y que exista en los documentos guardados
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @param {*} id - tipo ObjectID de MongoDB
+ * @returns 
+ */
 async function id (req, res, next, id) {
 
   if (!db.isValidId(id)) return next({
@@ -174,6 +183,15 @@ async function id (req, res, next, id) {
   }
 }
 
+/**
+ * Se encarga de validar las credenciales del usuario enviadas
+ * en el objeto request y si son validas, genera el token
+ * de autenticación
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 async function login (req, res, next) {
   const { body = {} } = req
   const { login = '', password = '' } = body
