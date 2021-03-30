@@ -14,13 +14,40 @@ function basicInfo(task) {
   return { id, title, description, url, dueDate, userId, createdAt }
 }
 
-
+/**
+ * Verifica que la solicitud GET se hizo por el mismo usuario
+ * que está logueado, es decir, que un usuario solo puede ver
+ * sus propias tareas
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 async function parentId(req, res, next){
-  const { params = {} } = req
+  const { decoded = {}, params = {} } = req
+  const { sub } = decoded
   const { userId = null } = params
 
   if (!userId) {
-    return next()
+    const message = 'UserId cannot be null'
+
+    return next({
+      success: false,
+      message,
+      statusCode: 400,
+      level: 'warn'
+    })
+  }
+
+  if (sub !== userId) {
+    const message = 'Forbidden'
+
+    return next({
+      success: false,
+      message,
+      statusCode: 403,
+      level: 'warn'
+    })
   }
 
   try {
