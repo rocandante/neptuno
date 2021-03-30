@@ -3,6 +3,7 @@ const router = require('express').Router({
 })
 const controller = require('./controller')
 const { auth, owner } = require('../../middleware/auth')
+const { sanitizers } = require('./model')
 
 /*
 * /api/tasks/ POST      - Create
@@ -14,7 +15,7 @@ const { auth, owner } = require('../../middleware/auth')
 
 router
   .route('/')
-  .post(auth, controller.parentId, controller.create)
+  .post(auth, controller.parentId, sanitizers, controller.create)
   .get(auth, controller.parentId, controller.getAll)
 
 router.param('id', controller.id)
@@ -22,7 +23,7 @@ router.param('id', controller.id)
 router
   .route('/:id')
   .get(auth, controller.parentId, controller.getOne)
-  .put(auth, owner, controller.parentId, controller.update)
+  .put(auth, owner, controller.parentId, sanitizers, controller.update)
   .delete(auth, owner, controller.parentId, controller.deleteOne)
  
 

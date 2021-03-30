@@ -1,4 +1,4 @@
-const Model = require('./model')
+const { Model } = require('./model')
 const db = require('../../helper/db')
 const { signToken } = require('../../middleware/auth')
 

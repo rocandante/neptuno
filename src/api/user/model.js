@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const { hash, compare } = require('bcryptjs')
+const { body } = require('express-validator')
 
 const { Schema } = mongoose
 
@@ -74,4 +75,21 @@ userSchema.methods.verifyPassword = function verifyPassword(password) {
   return compare(password, this.password)
 }
 
-module.exports = mongoose.model('user', userSchema)
+const sanitizers = [
+  body('username').escape(),
+  body('firstname').escape(),
+  body('lastname').escape(),
+  body('email').isEmail().normalizeEmail(),
+  body('isActive').toBoolean()
+]
+
+const sanitizerLogin = [
+  body('login').escape()
+]
+
+module.exports = {
+  Model: mongoose.model('user', userSchema),
+  sanitizers,
+  sanitizerLogin
+}
+
