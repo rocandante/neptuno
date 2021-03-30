@@ -144,9 +144,32 @@ const me = (req, res, next) => {
   next()
 }
 
+const owner = (req, res, next) => {
+  const { decoded = {}, doc = {} } = req
+  const { sub } = decoded
+
+  console.log(doc)
+
+  const { id } = doc.userId
+
+  if (sub !== id) {
+    const message = 'Forbidden'
+
+    return next({
+      success: false,
+      message,
+      statusCode: 403,
+      level: 'warn'
+    })
+  }
+
+  next()
+}
+
 module.exports = {
   signToken,
   auth,
   role,
-  me
+  me,
+  owner
 }

@@ -2,7 +2,7 @@ const router = require('express').Router({
   mergeParams: true
 })
 const controller = require('./controller')
-const { auth } = require('../../middleware/auth')
+const { auth, owner } = require('../../middleware/auth')
 
 /*
 * /api/tasks/ POST      - Create
@@ -22,8 +22,8 @@ router.param('id', controller.id)
 router
   .route('/:id')
   .get(auth, controller.parentId, controller.getOne)
-  .put(auth, controller.parentId, controller.update)
-  .delete(auth, controller.parentId, controller.deleteOne)
+  .put(auth, owner, controller.parentId, controller.update)
+  .delete(auth, owner, controller.parentId, controller.deleteOne)
  
 
 module.exports = router
