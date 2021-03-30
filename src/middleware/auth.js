@@ -118,8 +118,8 @@ const role = (roles = []) => {
 }
 
 /**
- * Restringe que las acciones PUT o DELETE sólo se realicen
- * sobre los documentos pertenecientes al mismo usuario.
+ * Restringe que las acciones PUT o DELETE para que 
+ * sólo se realicen por el mismo usuario que está logueado
  * @param {*} req 
  * @param {*} res 
  * @param {*} next 
@@ -144,6 +144,14 @@ const me = (req, res, next) => {
   next()
 }
 
+/**
+ * Restringe las acciones sobre PUT y DELETE para
+ * que el usuario solo pueda modificar o borrar sus propio documentos
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 const owner = (req, res, next) => {
   const { decoded = {}, doc = {} } = req
   const { sub } = decoded
