@@ -3,8 +3,19 @@ const requestId = require('express-request-id')()
 const errorHandler = require('../middleware/errorHandler')
 const logger = require('./logger')
 const api = require('../api')
+const cors = require('cors')
+
 
 const app = express()
+
+// Setup cors
+app.use(
+  cors({
+    origin: '*',
+    methods: ['GET', 'PUT', 'POST', 'DELETE'],
+    allowedHeaders: ['Accept', 'Content-Type', 'Authorization']
+  })
+)
 
 // Setup middleware
 app.use(requestId)
