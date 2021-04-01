@@ -1,0 +1,803 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Neptuno API Boilerplate",
+    "description": "Especificación para el proyecto Neptuno API Boilerplate para crear API's RETFUL rápidamente.",
+    "version": "0.1.0"
+  },
+  "servers": [
+    {
+      "url": "http://{domain}:{port}/{basePath}",
+      "description": "Servidor API en producción",
+      "variables": {
+        "domain": {
+          "default": "localhost"
+        },
+        "port": {
+          "default": "3000"
+        },
+        "basePath": {
+          "default": "api"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/users/{userId}/tasks": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/useridParam"
+        }
+      ],
+      "get": {
+        "security": [
+          {
+            "token_key": []
+          },
+          {
+            "authorization": []
+          },
+          {
+            "basic_auth": []
+          }
+        ],
+        "tags": [
+          "Tasks"
+        ],
+        "description": "Retorna un conjunto de documentos Task que pertenecen a un usuario",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/limitParam"
+          },
+          {
+            "$ref": "#/components/parameters/skipParam"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Lista de documentos que contiene tareas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "token_key": []
+          },
+          {
+            "authorization": []
+          },
+          {
+            "basic_auth": []
+          }
+        ],
+        "tags": [
+          "Tasks"
+        ],
+        "description": "Crea un nuevo documento Task",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/taskParam"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Lista de documentos que contiene tareas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          }
+        }
+      }
+    },
+    "/users/{userId}/tasks/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/useridParam"
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "description": "ID para el objeto task",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuii"
+          }
+        }
+      ],
+      "put": {
+        "security": [
+          {
+            "token_key": []
+          },
+          {
+            "authorization": []
+          },
+          {
+            "basic_auth": []
+          }
+        ],
+        "tags": [
+          "Tasks"
+        ],
+        "description": "Modifica un documento Task por su ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/taskParam"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Retorna documento que contiene Task.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "token_key": []
+          },
+          {
+            "authorization": []
+          },
+          {
+            "basic_auth": []
+          }
+        ],
+        "tags": [
+          "Tasks"
+        ],
+        "description": "Elimina un documento Task por su ID",
+        "responses": {
+          "201": {
+            "description": "Retorna documento que contiene Task.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "security": [
+          {
+            "token_key": []
+          },
+          {
+            "authorization": []
+          },
+          {
+            "basic_auth": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "description": "Retorna un conjunto de documentos User. Restringido para el rol Admin",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/limitParam"
+          },
+          {
+            "$ref": "#/components/parameters/skipParam"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Lista de documentos que contiene Users.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "token_key": []
+          },
+          {
+            "authorization": []
+          },
+          {
+            "basic_auth": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "description": "Crea un nuevo documento User. Restringido para el rol Admin",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/userParam"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Lista de documentos que contiene Users.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "description": "ID para el objeto User",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuii"
+          }
+        }
+      ],
+      "put": {
+        "security": [
+          {
+            "token_key": []
+          },
+          {
+            "authorization": []
+          },
+          {
+            "basic_auth": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "description": "Modifica un documento User por su ID. Restringido para el rol Admin",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/userParam"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Retorna documento que contiene User.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "token_key": []
+          },
+          {
+            "authorization": []
+          },
+          {
+            "basic_auth": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "description": "Elimina un documento User por su ID. Restringido para el rol Admin",
+        "responses": {
+          "201": {
+            "description": "Retorna documento que contiene User.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Loguea a un usuario en el sistema y retorna un token de autenticación",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "header",
+            "description": "permite ingresar credenciales por username o email",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Login"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Lista de documentos que contiene Users.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          }
+        }
+      }
+    },
+    "/user/singup": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Registra a un usuario en el sistema y retorna un token de autenticación",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "header",
+            "description": "crea un nuevo documento User, puede incluir firstname y lastname",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Lista de documentos que contiene Users.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          }
+        }
+      }
+    },
+    "/users/profile/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "description": "ID para el objeto User",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuii"
+          }
+        }
+      ],
+      "get": {
+        "security": [
+          {
+            "token_key": []
+          },
+          {
+            "authorization": []
+          },
+          {
+            "basic_auth": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "description": "Retorna un documento User por su ID. Restringido al usuario propietario",
+        "responses": {
+          "201": {
+            "description": "Retorna documento que contiene User.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "token_key": []
+          },
+          {
+            "authorization": []
+          },
+          {
+            "basic_auth": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "description": "Modifica un documento User por su ID. Restringido al usuario propietario",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/userParam"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Retorna documento que contiene User.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GeneralError": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "default": false
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "default": "4xx"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Task": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuii"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "example": {
+          "title": "Comprar leche",
+          "description": "leche deslactosada",
+          "url": "http://tiendadelbarrio.com",
+          "dueDate": "2021-04-10-0800"
+        }
+      },
+      "TaskResponse": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "object"
+          }
+        },
+        "example": {
+          "success": true,
+          "data": {
+            "title": "Comprar leche",
+            "description": "leche deslactosada",
+            "url": "http://tiendadelbarrio.com",
+            "dueDate": "2021-04-10-0800"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuii"
+          },
+          "username": {
+            "type": "string"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "admin"
+            ]
+          }
+        },
+        "example": {
+          "id": "autogenerado",
+          "username": "tyron",
+          "name": "Tyron Lannister",
+          "email": "tyron@lannister.com",
+          "role": "admin",
+          "isActive": true
+        }
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "object"
+          }
+        },
+        "example": {
+          "success": true,
+          "data": {
+            "id": "autogenerado",
+            "username": "tyron",
+            "name": "Tyron Lannister",
+            "email": "tyron@lannister.com",
+            "role": "admin",
+            "isActive": true
+          }
+        }
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
+          "login": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "object"
+          }
+        },
+        "example": {
+          "success": true,
+          "data": {
+            "id": "autogenerado",
+            "username": "tyron",
+            "name": "Tyron Lannister",
+            "email": "tyron@lannister.com",
+            "role": "admin",
+            "isActive": true
+          },
+          "meta": {
+            "token": "ALFANUMERIC"
+          }
+        }
+      }
+    },
+    "parameters": {
+      "skipParam": {
+        "name": "skip",
+        "in": "query",
+        "description": "number of items to skip",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "limitParam": {
+        "name": "limit",
+        "in": "query",
+        "description": "max records to return",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "useridParam": {
+        "name": "userId",
+        "in": "path",
+        "description": "ID de usuario",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "byte"
+        }
+      },
+      "taskParam": {
+        "name": "body",
+        "in": "header",
+        "description": "Objeto para tareas",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/Task"
+        }
+      },
+      "userParam": {
+        "name": "body",
+        "in": "header",
+        "description": "Objeto para tareas",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/User"
+        }
+      }
+    },
+    "responses": {
+      "NotFound": {
+        "description": "No se encontró el documento.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GeneralError"
+            }
+          }
+        }
+      },
+      "GeneralError": {
+        "description": "General Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GeneralError"
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Error de validación en la entrada",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GeneralError"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "No tiene autorización / Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GeneralError"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "authorization": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "token_key": {
+        "type": "apiKey",
+        "name": "token",
+        "in": "query"
+      },
+      "basic_auth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  }
+}

@@ -4,9 +4,13 @@ const errorHandler = require('../middleware/errorHandler')
 const logger = require('./logger')
 const api = require('../api')
 const cors = require('cors')
+const swaggerUI = require('swagger-ui-express')
+const swaggerDocument = require('../../openapi.json')
 
 
 const app = express()
+
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
 
 // Setup cors
 app.use(
