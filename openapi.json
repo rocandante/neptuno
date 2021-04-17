@@ -3,7 +3,7 @@
   "info": {
     "title": "Neptuno API Boilerplate",
     "description": "Especificación para el proyecto Neptuno API Boilerplate para crear API's RETFUL rápidamente.",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "servers": [
     {
