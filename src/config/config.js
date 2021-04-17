@@ -15,6 +15,7 @@ const config = {
     skip: 0,
     page: 1
   },
+  sortDefault: { 'createdAt':'desc' },
   token: {
     secret: process.env.TOKEN_SECRET,
     expires: process.env.TOKEN_EXPIRES

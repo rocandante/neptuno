@@ -2,7 +2,7 @@ const { Model } = require('./model')
 const db = require('../../../helper/db')
 const { signToken } = require('../../../middleware/auth')
 
-const { paginationParseParams } = db
+const { paginationParseParams, sortByFilter } = db
 
 /**
  * Se encarga de devolver una lista de campos ordenada
@@ -33,9 +33,10 @@ async function create (req, res, next) {
 
 async function getAll (req, res, next) {
   const { query = {} } = req
-  let { limit, page, skip } = paginationParseParams(query)
+  const { limit, page, skip } = paginationParseParams(query)
+  const sort = sortByFilter(query)
 
-  const all = Model.find({}).sort({'createdAt': 'desc'}).skip(skip).limit(limit)
+  const all = Model.find({}).sort(sort).skip(skip).limit(limit)
   const count = Model.countDocuments()
 
   try {
