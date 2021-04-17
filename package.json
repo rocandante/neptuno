@@ -1,7 +1,7 @@
 {
   "name": "neptuno",
-  "version": "1.0.0",
-  "description": "Nodejs Api Basic",
+  "version": "0.2.0",
+  "description": "Neptuno is a Boilerplate for create a API RESTful",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --inspect src/index",
@@ -13,8 +13,8 @@
     "url": "git+https://github.com/rocandante/neptuno.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Juan Cardona",
+  "license": "Mit",
   "bugs": {
     "url": "https://github.com/rocandante/neptuno/issues"
   },
@@ -33,14 +33,17 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-mongo-sanitize": "^2.0.2",
     "express-request-id": "^1.4.1",
     "express-validator": "^6.10.0",
+    "helmet": "^4.4.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.19",
     "morgan": "^1.10.0",
     "strip-final-newline": "^2.0.0",
     "swagger-ui-express": "^4.1.6",
     "winston": "^3.3.3",
-    "winston-daily-rotate-file": "^4.5.0"
+    "winston-daily-rotate-file": "^4.5.0",
+    "xss-clean": "^0.1.1"
   }
 }

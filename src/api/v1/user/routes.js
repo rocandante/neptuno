@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const controller = require('./controller')
-const { auth, role, me } = require('../../middleware/auth')
+const { auth, role, me } = require('../../../middleware/auth')
 const taskRouter = require('../task/routes')
 const { sanitizers, sanitizerLogin } = require('./model')
 

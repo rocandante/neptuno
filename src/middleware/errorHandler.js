@@ -1,4 +1,4 @@
-const logger = require('../server/logger')
+const logger = require('../config/logger')
 
 /**
  * Middleware responsable de manejar los errores,

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const { hash, compare } = require('bcryptjs')
 const { body } = require('express-validator')
+const { roles } = require('../../../config/roles')
 
 const { Schema } = mongoose
 
@@ -38,7 +39,7 @@ const userSchema = new Schema({
   },    
   role: { 
       type: String, 
-      enum: [ "user", "admin" ], 
+      enum: roles, 
       required: true,
       default: 'user' 
   },

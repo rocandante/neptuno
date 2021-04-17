@@ -20,11 +20,6 @@ const task = new Schema({
     type: Boolean,
     default: false
   },
-  url: {
-    type: String,
-    trim: true,
-    default: ''
-  },
   dueDate: {
     type: Date,
     default: null

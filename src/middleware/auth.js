@@ -1,6 +1,6 @@
 const { sign, verify } = require('jsonwebtoken')
-const config = require('../server/config')
-const { Model } = require('../api/user/model')
+const config = require('../config/config')
+const { Model } = require('../api/v1/user/model')
 
 const { secret, expires } = config.token
 

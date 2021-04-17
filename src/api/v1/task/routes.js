@@ -2,7 +2,7 @@ const router = require('express').Router({
   mergeParams: true
 })
 const controller = require('./controller')
-const { auth, owner } = require('../../middleware/auth')
+const { auth, owner } = require('../../../middleware/auth')
 const { sanitizers } = require('./model')
 
 /*
