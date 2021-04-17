@@ -1,7 +1,7 @@
 {
   "name": "neptuno",
-  "version": "1.0.0",
-  "description": "Nodejs Api Basic",
+  "version": "0.2.0",
+  "description": "Neptuno is a Boilerplate for create a API RESTful",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --inspect src/index",
