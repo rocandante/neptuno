@@ -33,6 +33,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-mongo-sanitize": "^2.0.2",
     "express-request-id": "^1.4.1",
     "express-validator": "^6.10.0",
     "helmet": "^4.4.1",
