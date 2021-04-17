@@ -1,5 +1,5 @@
 const { sign, verify } = require('jsonwebtoken')
-const config = require('../server/config')
+const config = require('../config/config')
 const { Model } = require('../api/user/model')
 
 const { secret, expires } = config.token
