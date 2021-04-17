@@ -4,11 +4,15 @@ const errorHandler = require('./middleware/errorHandler')
 const logger = require('./config/logger')
 const api = require('./api/v1')
 const cors = require('cors')
+const helmet = require('helmet')
 const swaggerUI = require('swagger-ui-express')
 const swaggerDocument = require('../openapi.json')
 
 
 const app = express()
+
+// set security HTTP headers
+app.use(helmet())
 
 app.use('/api/v1/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
 
