@@ -5,6 +5,7 @@ const logger = require('./config/logger')
 const api = require('./api/v1')
 const cors = require('cors')
 const helmet = require('helmet')
+const xss = require('xss-clean')
 const swaggerUI = require('swagger-ui-express')
 const swaggerDocument = require('../openapi.json')
 
@@ -34,6 +35,9 @@ app.use(express.urlencoded({ extended: false }))
 // parse application/json
 app.use(express.json())
 
+// sanitize request data
+app.use(xss())
+// app.use(mongoSanitize())
 
 // Setup router and routes
 app.use('/api/v1', api)
