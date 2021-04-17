@@ -2,7 +2,7 @@ const express = require('express')
 const requestId = require('express-request-id')()
 const errorHandler = require('./middleware/errorHandler')
 const logger = require('./config/logger')
-const api = require('./api')
+const api = require('./api/v1')
 const cors = require('cors')
 const swaggerUI = require('swagger-ui-express')
 const swaggerDocument = require('../openapi.json')
@@ -32,7 +32,7 @@ app.use(express.json())
 
 
 // Setup router and routes
-app.use('/api', api)
+app.use('/api/v1', api)
 
 app.get('/', (req, res, next) => {
   res.send('Bienvenido a la API REST')

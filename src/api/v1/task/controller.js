@@ -1,5 +1,5 @@
 const { Model } = require('./model')
-const db = require('../../helper/db')
+const db = require('../../../helper/db')
 const User = require('../user/model')
 
 const { paginationParseParams } = db

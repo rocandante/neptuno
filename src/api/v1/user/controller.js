@@ -1,6 +1,6 @@
 const { Model } = require('./model')
-const db = require('../../helper/db')
-const { signToken } = require('../../middleware/auth')
+const db = require('../../../helper/db')
+const { signToken } = require('../../../middleware/auth')
 
 const { paginationParseParams } = db
 
