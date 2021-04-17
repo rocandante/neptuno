@@ -10,8 +10,8 @@ const { paginationParseParams } = db
  * @param {*} task - el objeto que contiene la tarea
  */
 function basicInfo(task) {
-  const { id, title, description, url, dueDate, userId, createdAt } = task
-  return { id, title, description, url, dueDate, userId, createdAt }
+  const { id, title, description, dueDate, userId, createdAt } = task
+  return { id, title, description, dueDate, userId, createdAt }
 }
 
 /**
